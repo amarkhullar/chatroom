@@ -10,6 +10,8 @@ router.post('/',(req,res) => {
     var username = req.body.username;
     var password = req.body.password;
 
+    let errors = [];
+
     User.findOne({username: username, password: password}, function(err,user) {
         if(err) {
             console.log(err);
@@ -17,12 +19,16 @@ router.post('/',(req,res) => {
         }
 
         if(!user) {
-            return res.status(404).send();
-            console.log('not found')
+            console.log('erro');
+            errors.push({msg: "Incorrect login details, please try again"})
+            res.render('login', {
+                errors
+            });
+        }else {
+            console.log('login succ');
+            return res.status(200).send();
         }
 
-        console.log('ssss')
-        return res.status(200).send();
         
     })
 })
