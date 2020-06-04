@@ -19,13 +19,11 @@ router.post('/',(req,res) => {
         }
 
         if(!user) {
-            console.log('erro');
             errors.push({msg: "Incorrect login details, please try again"})
             res.render('login', {
                 errors
             });
         }else {
-            console.log('login succ');
             return res.status(200).send();
         }
 
