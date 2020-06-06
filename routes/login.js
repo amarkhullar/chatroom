@@ -20,9 +20,7 @@ router.post('/',(req,res) => {
 
         if(!user) {
             errors.push({msg: "Incorrect login details, please try again"})
-            res.render('login', {
-                errors
-            });
+            res.render('login', {errors});
         }else {
             return res.status(200).send();
         }

@@ -4,16 +4,22 @@
     <% }); %>
 <% }; %>
 
-<% if(success_msg.msg !== '') { %>
+<% if(typeof successMsg != 'undefined') {%>
+    <% successMsg.forEach(function(message) { %>
+        <%=message.msg%>
+    <% }); %>
+<% }; %>
+
+<!-- <% if(success_msg.msg !== '') { %>
     <%= success_msg %>
 <% }; %>
 
 <% if(error_msg.msg !== '') { %>
     <%= error_msg.msg %>
-<% }; %>
+<% }; %> -->
 
-<% flash.forEach(function(msg) { %>
+<!-- <% flash.forEach(function(msg) { %>
     <% if(typeof msg.message !== Object) {%>
         <%=msg.message%>
     
-<% }}); %>
+<% }}); %> -->

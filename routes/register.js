@@ -10,6 +10,7 @@ router.get('/',(req,res) => {
 router.post('/',(req,res) => {
 
     let errors = [];
+    let successMsg = [];
 
     var username = req.body.username;
     var password = req.body.password;
@@ -43,8 +44,8 @@ router.post('/',(req,res) => {
                         newUser.password = hash;
                         newUser.save()
                         .then(user => {
-                            req.flash('success_msg','Successfully registered');
-                            res.redirect('login');
+                            successMsg.push({msg: 'Successfully registered'});
+                            res.render('login',{successMsg});
                         })
                         .catch(err => console.log(err));
                 }))
