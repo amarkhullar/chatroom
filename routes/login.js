@@ -22,7 +22,9 @@ router.post('/',(req,res) => {
             errors.push({msg: "Incorrect login details, please try again"})
             res.render('login', {errors});
         }else {
+            console.log('ps');
             return res.status(200).send();
+
         }
 
         
