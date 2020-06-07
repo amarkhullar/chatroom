@@ -8,7 +8,9 @@ const mongoose = require('mongoose')
 const expressLayouts = require('express-ejs-layouts')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const flash = require('flash')
+const flash = require('connect-flash')
+const passport = require('passport')
+require('./config/passport')(passport)
 
 const port = parseInt(process.env.PORT,10) || 3000;
 
@@ -41,8 +43,20 @@ app.use(flash());
 app.use((req,res,next) => {
     res.locals.success_msg  = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
     next();
 });
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session())
+
+
+
+app.get('/',isLoggedIn, (req,res) => {
+    res.render('index.ejs',{name: req.user.username})
+});
+
 
 // body parser for http requests
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -52,10 +66,27 @@ app.use(bodyParser.json())
 const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const registerRouter = require('./routes/register')
+const snakeRouter = require('./routes/snake')
 
 // routers
 app.use('/',indexRouter)
-app.use('/login',loginRouter)
-app.use('/register',registerRouter)
+app.use('/login',isNotLoggedIn,loginRouter)
+app.use('/register',isNotLoggedIn,registerRouter)
+app.use('/snake',isLoggedIn,snakeRouter)
+
+function isLoggedIn(req,res,next) {
+    if(req.isAuthenticated()) {
+        return next()
+    }
+    res.render('login.ejs')
+}
+
+function isNotLoggedIn(req,res,next) {
+    if(req.isAuthenticated()) {
+        return res.render('/', {name:req.user.username})
+    }
+    next()
+}
+
 
 app.listen(port)

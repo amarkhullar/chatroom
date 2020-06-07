@@ -1,34 +1,21 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
+const passport = require('passport')
 
 router.get('/',(req,res) => {
     res.render('login')
 })
 
-router.post('/',(req,res) => {
-    var username = req.body.username;
-    var password = req.body.password;
+router.post('/',(req,res,next) => {
 
-    let errors = [];
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/login',
+        failureFlash: true
 
-    User.findOne({username: username, password: password}, function(err,user) {
-        if(err) {
-            console.log(err);
-            return res.status(500).send();
-        }
+    })(req,res,next);
 
-        if(!user) {
-            errors.push({msg: "Incorrect login details, please try again"})
-            res.render('login', {errors});
-        }else {
-            console.log('ps');
-            return res.status(200).send();
-
-        }
-
-        
-    })
-})
+});
 
 module.exports = router

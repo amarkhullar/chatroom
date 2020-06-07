@@ -10,16 +10,14 @@
     <% }); %>
 <% }; %>
 
-<!-- <% if(success_msg.msg !== '') { %>
+<% if(success_msg !== '') { %>
     <%= success_msg %>
 <% }; %>
 
-<% if(error_msg.msg !== '') { %>
-    <%= error_msg.msg %>
-<% }; %> -->
+<% if(error_msg != '') { %>
+    <%= error_msg %>
+<% }; %>
 
-<!-- <% flash.forEach(function(msg) { %>
-    <% if(typeof msg.message !== Object) {%>
-        <%=msg.message%>
-    
-<% }}); %> -->
+<% if(error != '') { %>
+    <%= error %>
+<% }; %>
