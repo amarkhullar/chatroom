@@ -63,13 +63,13 @@ app.use(passport.session())
 
 
 
-app.get('/',isLoggedIn, (req,res) => {
-    res.render('index.ejs',{name: req.user.username})
-});
+// app.get('/',isLoggedIn, (req,res) => {
+//     res.render('index.ejs',{name: req.user.username})
+// });
 
 
 // body parser for http requests
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // routes
@@ -93,10 +93,95 @@ function isLoggedIn(req,res,next) {
 
 function isNotLoggedIn(req,res,next) {
     if(req.isAuthenticated()) {
-        return res.render('/', {name:req.user.username})
+        return res.render('index', {name:req.user.username})
     }
     next()
 }
 
+// index
+
+//const rooms  = { name: {}}
+
+// router.get('/',(req,res) => {
+
+//     res.render('index',{rooms : rooms})
+// }) 
+
+// router.get('/:room', (res,req) => {
+//     res.render('room',{roomName : req.params.room})
+// })
+
+
+// login
+
+// router.get('/',(req,res) => {
+//     res.render('login')
+// })
+
+// router.post('/',(req,res,next) => {
+
+//     passport.authenticate('local', {
+//         successRedirect: '/',
+//         failureRedirect: '/login',
+//         failureFlash: true
+
+//     })(req,res,next);
+
+// });
+
+
+//register
+
+// router.get('/',(req,res) => {
+//     res.render('register')
+// })
+
+// router.post('/',(req,res) => {
+
+//     let errors = [];
+//     let successMsg = [];
+
+//     var username = req.body.username;
+//     var password = req.body.password;
+//     var password2 = req.body.password2;
+
+//     if(!username || !password || !password2) {
+//         errors.push({msg: "Please fill in all fields"});
+//     }
+
+//     if(password !== password2) {
+//         errors.push({msg: "Passwords do not match"});
+//     }
+
+//     if(errors.length > 0) {
+//         res.render('register',{errors});
+//     }else {
+    
+//         User.findOne({username:username}).then(user => {
+//             if(user) {
+//                 errors.push({msg: 'Username is already taken'});
+//                 res.render('register',{errors});
+//             }else {
+
+//                 var newUser = new User();
+//                 newUser.username = username;
+//                 newUser.password = password;
+                
+//                 bcrypt.genSalt(10,(err,salt) => 
+//                     bcrypt.hash(newUser.password,salt,(err,hash) => {
+//                         if(err) throw err;
+//                         newUser.password = hash;
+//                         newUser.save()
+//                         .then(user => {
+//                             successMsg.push({msg: 'Successfully registered'});
+//                             res.render('login',{successMsg});
+//                         })
+//                         .catch(err => console.log(err));
+//                 }))
+//             }
+//         })
+//     }
+
+// })
 
 app.listen(port)
