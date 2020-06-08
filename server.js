@@ -78,15 +78,35 @@ let rooms = {name: {}};
 app.use('/',indexRouter)
 app.use('/login',isNotLoggedIn,loginRouter)
 app.use('/register',isNotLoggedIn,registerRouter)
-app.use('/snake',isLoggedIn,snakeRouter)
+// var path = require('path');
+// app.get('/snake',(req,res) => {
+//     res.sendFile(path.join(__dirname, '/public', 'snake.html'));
+// })
+//app.use('/snake',res.sendFile(path.join(__dirname, '../public', 'index1.html')))
 
 app.get('/',isLoggedIn, (req,res) => {
     res.render('index.ejs',{name: req.user.username,rooms:rooms})
 });
 
-app.get('/:roomName', isLoggedIn, (req,res) => {
-    res.render('room',{roomName : req.body.roomName})
+app.post('/room',(req,res) => {
+    if(rooms[req.body.room] != null) {
+        // add error msg
+        return res.redirect('/')
+    }
+    rooms[req.body.room] = {users : {}}
+    res.redirect(req.body.room)
+    io.emit('room-created',req.body.room)
+
 })
+
+app.get('/:room', isLoggedIn, (req,res) => {
+    if(rooms[req.params.room] == null) {
+        // add error msg
+        res.redirect('/')
+    }
+    res.render('room',{roomName : req.params.room})
+})
+
 
 function isLoggedIn(req,res,next) {
     if(req.isAuthenticated()) {
