@@ -1,6 +1,17 @@
-<a href="/snake">Play</a>
-<br>
-<a href="/leaderboard">Leaderboard</a>
+<head>
+    <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <div id="room-container">
+        <% Object.keys(rooms).forEach(room => { %>
+            <div><%= room %></div>
+            <a href="/<%= room %>">Join</a>
+        <% }); %>
+    </div>
+</body>
+
 <br>
 Hello
 <%- name %>

@@ -61,16 +61,10 @@ app.use((req,res,next) => {
 app.use(passport.initialize());
 app.use(passport.session())
 
-
-
-app.get('/',isLoggedIn, (req,res) => {
-    res.render('index.ejs',{name: req.user.username})
-});
-
-
 // body parser for http requests
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+//app.use(express.urlencoded({extended:true}))
 
 // routes
 const indexRouter = require('./routes/index')
@@ -78,22 +72,32 @@ const loginRouter = require('./routes/login')
 const registerRouter = require('./routes/register')
 const snakeRouter = require('./routes/snake')
 
+let rooms = {name: {}};
+
 // routers
 app.use('/',indexRouter)
 app.use('/login',isNotLoggedIn,loginRouter)
 app.use('/register',isNotLoggedIn,registerRouter)
 app.use('/snake',isLoggedIn,snakeRouter)
 
+app.get('/',isLoggedIn, (req,res) => {
+    res.render('index.ejs',{name: req.user.username,rooms:rooms})
+});
+
+app.get('/:roomName', isLoggedIn, (req,res) => {
+    res.render('room',{roomName : req.body.roomName})
+})
+
 function isLoggedIn(req,res,next) {
     if(req.isAuthenticated()) {
         return next()
     }
-    res.render('login.ejs')
+    res.redirect('login')
 }
 
 function isNotLoggedIn(req,res,next) {
     if(req.isAuthenticated()) {
-        return res.render('/', {name:req.user.username})
+        return res.redirect('/')
     }
     next()
 }
