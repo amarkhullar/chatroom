@@ -10,6 +10,11 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('passport')
+const http = require('http')
+const server = http.createServer(app);
+const socketio = require('socket.io')
+const io = socketio(server);
+
 require('./config/passport')(passport)
 
 const port = parseInt(process.env.PORT,10) || 3000;
@@ -19,6 +24,11 @@ mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser: true})
 const db = mongoose.connection
 db.on('error',error => console.error(error))
 db.once('open',() => console.log('Connected to DB'))
+
+
+io.on('connection',socket => {
+    console.log('new WS connection');
+});
 
 // ejs
 app.set('view engine','ejs')
