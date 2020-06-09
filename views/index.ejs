@@ -1,23 +1,58 @@
 <head>
     <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script defer src="script.js"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        .vertical-center {
+            min-height: 100%;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+        }
+        .center {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .form-group {
+            text-align: center;
+        }
+        .form-actions {
+            margin: 0;
+            background-color: transparent;
+            text-align: center;
+        }
+        .roomName {
+            background-color: white;
+            border-style: solid;
+            
+        }
+    </style>
 </head>
 
 <body>
-    <div id="room-container">
-        <% Object.keys(rooms).forEach(room => { %>
-            <div><%= room %></div>
-            <a href="/<%= room %>">Join</a>
-        <% }); %>
+    <a href="/logout">Log out</a>
+    <div class="vertical-center center">
+    <div class="container">
+        <div id="room-container">
+            <% Object.keys(rooms).forEach(room => { %>
+                <div class="roomName">Chatroom: <%= room %>
+                <a href="/<%= room %>">Join</a></div><br>
+            <% }); %>
+        </div>
+        <br>
+        <form action="/room" method="POST">
+            <input name="room" type="text" required>
+            <button type="submit">New Room</button>
+        </form>
+        <div class="form-actions"> 
+            <p style="color:red"><%- include('./partials/messages.ejs') %></p>
+        </div>
     </div>
 
-    <form action="/room" method="POST">
-        <input name="room" type="text" required>
-        <button type="submit">New Room</button>
-    </form>
-</body>
+    </div>
 
-<br>
-<br>
-Hello
-<%- name %>
+</body>

@@ -25,11 +25,6 @@ const db = mongoose.connection
 db.on('error',error => console.error(error))
 db.once('open',() => console.log('Connected to DB'))
 
-
-io.on('connection',socket => {
-    console.log('new WS connection');
-});
-
 // ejs
 app.set('view engine','ejs')
 app.set('views', __dirname + '/views')
@@ -64,49 +59,75 @@ app.use(passport.session())
 // body parser for http requests
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-//app.use(express.urlencoded({extended:true}))
 
 // routes
-const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const registerRouter = require('./routes/register')
-const snakeRouter = require('./routes/snake')
 
-let rooms = {name: {}};
 
 // routers
-app.use('/',indexRouter)
 app.use('/login',isNotLoggedIn,loginRouter)
 app.use('/register',isNotLoggedIn,registerRouter)
-// var path = require('path');
-// app.get('/snake',(req,res) => {
-//     res.sendFile(path.join(__dirname, '/public', 'snake.html'));
-// })
-//app.use('/snake',res.sendFile(path.join(__dirname, '../public', 'index1.html')))
 
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+  });
+
+var username = '';
 app.get('/',isLoggedIn, (req,res) => {
+    username = req.user.username;
     res.render('index.ejs',{name: req.user.username,rooms:rooms})
 });
 
-app.post('/room',(req,res) => {
-    if(rooms[req.body.room] != null) {
-        // add error msg
+const rooms = { }
+
+app.get('/', (req, res) => {
+  res.render('index', { rooms: rooms, username: username})
+})
+
+app.post('/room', (req, res) => {
+    if (rooms[req.body.room] != null) {
+        req.flash('error_msg','Room already exists')
         return res.redirect('/')
     }
-    rooms[req.body.room] = {users : {}}
+    rooms[req.body.room] = { users: {} }
     res.redirect(req.body.room)
-    io.emit('room-created',req.body.room)
-
+    io.emit('room-created', req.body.room)
 })
 
-app.get('/:room', isLoggedIn, (req,res) => {
-    if(rooms[req.params.room] == null) {
-        // add error msg
-        res.redirect('/')
+app.get('/:room', (req, res) => {
+    if (rooms[req.params.room] == null) {
+        return res.redirect('/')
     }
-    res.render('room',{roomName : req.params.room})
+    res.render('room', { roomName: req.params.room, username: username})
 })
 
+server.listen(3000)
+
+io.on('connection', socket => {
+    socket.on('new-user', (room, name) => {
+        socket.join(room)
+        rooms[room].users[socket.id] = name
+        socket.to(room).broadcast.emit('user-connected', name)
+    })
+    socket.on('send-chat-message', (room, message) => {
+        socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] })
+    })
+    socket.on('disconnect', () => {
+        getUserRooms(socket).forEach(room => {
+        socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id])
+        delete rooms[room].users[socket.id]
+        })
+    })
+})
+
+function getUserRooms(socket) {
+    return Object.entries(rooms).reduce((names, [name, room]) => {
+        if (room.users[socket.id] != null) names.push(name)
+        return names
+    }, [])
+}
 
 function isLoggedIn(req,res,next) {
     if(req.isAuthenticated()) {
@@ -121,6 +142,3 @@ function isNotLoggedIn(req,res,next) {
     }
     next()
 }
-
-
-app.listen(port)

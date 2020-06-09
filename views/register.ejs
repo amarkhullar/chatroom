@@ -1,20 +1,57 @@
-<head><title>Register</title></head>
-<h1>Register</h1>
-<%- include('./partials/messages') %>
-<form action="/register" method="post">
-    <div>
-        <label>Username</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <div>
-        <label>Password</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <label>Repeat Password</label>
-        <input type="password" id="password2" name="password2" required>
-    </div>
-    <button type="submit">Register</button>
-</form>
+<head><title>Register</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        .vertical-center {
+            min-height: 100%;
+            min-height: 100vh;
 
-<a href="/login">Login</a>
+            display: flex;
+            align-items: center;
+        }
+        .center {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .form-group {
+            text-align: center;
+        }
+        .form-actions {
+            margin: 0;
+            background-color: transparent;
+            text-align: center;
+        }
+    </style>
+</head>
+<div class="vertical-center">
+<div class= "container">
+    <h1>Register</h1>
+    <br>
+    <form action="/register" method="post">
+        <div class="form-group">
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username">
+        </div>
+        <br>
+        <div class="form-group">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+        </div>
+        <br>
+        <div class="form-group">
+            <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat Password">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <br>
+    <div class="form-actions"> 
+        <p style="color:red"><%- include('./partials/messages.ejs') %></p>
+        <a href="/login">Login</a>
+    </div>
+</div>
+</div>
+
+
+

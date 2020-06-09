@@ -1,2 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Room</title>
+  <script>
+    const roomName = "<%= roomName %>"
+  </script>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="script.js"></script>
+  <style>
 
-<%- roomName %>
+    #message-container {
+      width: 80%;
+      max-width: 1200px;
+    }
+    #message-container div {
+      background-color: #CCC;
+      padding: 5px;
+    }
+    #message-container div:nth-child(2n) {
+      background-color: #FFF;
+    }
+    #send-container {
+      padding-bottom: 30px;
+      bottom: 0;
+      /* max-width: 1200px;
+      width: 80%; */
+
+    }
+    #message-input {
+      flex-grow: 1;
+    }
+    h1 {
+        text-align: center;
+    }
+    .vertical-center {
+        min-height: 100%;
+        min-height: 100vh;
+
+        display: flex;
+        align-items: center;
+    }
+
+    .center {
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+    .form-group {
+        text-align: center;
+    }
+    .form-actions {
+        margin: 0;
+        background-color: transparent;
+        text-align: center;
+    }
+    .bord {
+        border-style:solid;
+    }
+  </style>
+</head>
+<body>
+    Logged in as: <div id="username"><%- username %></div>
+    <h1><div style="text-align:center;">Chatroom: <%= roomName %></div></h1><br>
+    <div class="toppish-center">
+
+    <div class="container ">
+        <div id="message-container" class="container"></div>
+            <form id="send-container" class="msg">
+                <br>
+                <div class="form-actions">
+                    <input type="text" id="message-input">
+
+                        <button type="submit" id="send-button">Send</button>
+
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </div>
+</body>

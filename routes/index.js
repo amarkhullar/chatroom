@@ -3,7 +3,7 @@ const router = express.Router()
 const passport = require('passport')
 const bodyParser = require('body-parser')
 
-const rooms  = { name: {}}
+//const rooms  = { name: {}}
 
 // router.get('/',(req,res) => {
 //     res.render('index',{room:rooms})
