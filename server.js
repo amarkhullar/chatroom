@@ -96,7 +96,7 @@ app.post('/room', (req, res) => {
     io.emit('room-created', req.body.room)
 })
 
-app.get('/:room', (req, res) => {
+app.get('/:room', isLoggedIn,(req, res) => {
     if (rooms[req.params.room] == null) {
         return res.redirect('/')
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Room</title>
+  <title><%= roomName %></title>
   <script>
     const roomName = "<%= roomName %>"
   </script>
@@ -60,7 +60,8 @@
   </style>
 </head>
 <body>
-    Logged in as: <div id="username"><%- username %></div>
+    Logged in as: <div id="username"><%- username %></div><br>
+    <a href="/">Back to rooms</a>
     <h1><div style="text-align:center;">Chatroom: <%= roomName %></div></h1><br>
     <div class="toppish-center">
 
@@ -77,7 +78,9 @@
                 </div>
 
             </form>
+
         </div>
+
     </div>
     </div>
 </body>

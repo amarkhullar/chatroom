@@ -1,0 +1,39 @@
+To run:
+
+node server.js
+
+Contributors:
+
+Amar Khullar (ak17050) - 50%
+Andrew Thorn (at17556) - 50%
+
+Our website is a chatroom where you can create and join rooms, and chat to other users. Users must register and login to be able to access the chatrooms.
+
+HTML - B
+- Used HTML and dynamic EJS
+
+CSS - C
+- Not particularly proud of the CSS
+
+JS - B
+- Used clientside JS for the chatroom page
+
+PNG - A
+-We didn't end up including the image in the website as it didn't look good, but we created a logo in Photoshop. Screenshots are included.
+
+SVG - X
+
+Server - A
+- URL validation
+- Web sockets
+- Sessions
+
+Database - C
+- Used a database and created my own schema
+
+Dynamic Pages - B
+- Used dynamic pages quite a lot
+
+Depth - 10/20
+
+We used websockets to make the chatrooms work
